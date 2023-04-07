@@ -1,5 +1,4 @@
 # Vizualizace fraktálů
----
 
 ## Textový popis
 
