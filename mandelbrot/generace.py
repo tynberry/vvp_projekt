@@ -43,7 +43,6 @@ def mandelbrot(x_min:float, x_max:float, y_min:float, y_max:float, cells: int, m
     #vrať počet operací
     return divergence
 
-@numba.njit
 def julia_set(x_min:float, x_max:float, y_min:float, y_max:float, c: complex, cells: int, max_iter: int) -> np.array:
     """
     Vygeneruj Juliovu množinu.
@@ -63,11 +62,6 @@ def julia_set(x_min:float, x_max:float, y_min:float, y_max:float, c: complex, ce
     #matice stavu 
     state = x+y
     #udělej iterace 
-    for i in range(max_iter):
-        #udělej jednu iteaci 
-        state **= 2
-        state += c
-        #přičti iteraci 
-        divergence[np.abs(state) <= 2] += 1
+    divergence = count_iters(state, c, max_iter)
     #vrať počet operací
     return divergence
