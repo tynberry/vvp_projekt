@@ -2,13 +2,13 @@ import numba
 import numpy as np
 
 @numba.vectorize([numba.int64(numba.complex128, numba.complex128, numba.int32)])
-def count_iters(state: numba.complex128, c: numba.complex128, max_iter: numba.int32) -> numba.int64:
+def count_iters(state: complex, c: complex, max_iter: int) -> int:
     """
     Spočítá počet operací než hodnota vyběhne ven. 
 
-    state je počáteční hodnota.
-    c je číslo c přičítané každou iteraci
-    max_iter je maximální počet iterací 
+    :param state: počáteční hodnota
+    :param c: číslo přičítané každou iteraci
+    :param max_iter: maximální počet iterací 
     """
     for i in range(max_iter):
         state **= 2
@@ -25,10 +25,12 @@ def mandelbrot(x_min:float, x_max:float, y_min:float, y_max:float, cells: int, m
     Vygeneruj Mandelbrotovu množinu.
     Vrací matici počtu iterací.
 
-    x_min a x_max určují rozmezí na reálné ose.
-    y_min a y_max určují rozmezí na imaginární ose.
-    cells na kolik políček se rozdělí každá osa.
-    max_iter určuje počet maximální počet iterací.
+    :param x_min: nejmenší číslo na reálné ose 
+    :param x_max: největší číslo na reálné ose.
+    :param y_min: nejmenší číslo na imaginární ose 
+    :param y_max: největší číslo na imaginární ose.
+    :param cells: na kolik políček se rozdělí každá osa.
+    :param max_iter: maximální počet iterací
     """
     #divergenční matice 
     divergence = np.zeros((cells,cells), dtype=np.int32)
@@ -48,11 +50,13 @@ def julia_set(x_min:float, x_max:float, y_min:float, y_max:float, c: complex, ce
     Vygeneruj Juliovu množinu.
     Vrací matici počtu iterací.
 
-    x_min a x_max určují rozmezí na reálné ose.
-    y_min a y_max určují rozmezí na imaginární ose.
-    cells na kolik políček se rozdělí každá osa.
-    max_iter určuje počet maximální počet iterací.
-    c je komplexní parametr C
+    :param x_min: nejmenší číslo na reálné ose 
+    :param x_max: největší číslo na reálné ose.
+    :param y_min: nejmenší číslo na imaginární ose 
+    :param y_max: největší číslo na imaginární ose.
+    :param c: číslo, které se přičítá každou iteraci
+    :param cells: na kolik políček se rozdělí každá osa.
+    :param max_iter: maximální počet iterací
     """
     #divergenční matice 
     divergence = np.zeros((cells,cells), dtype=np.int32)
