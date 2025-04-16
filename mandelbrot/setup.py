@@ -9,7 +9,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         # Seznam externích balíčků potřebných k provozu
-        "numpy", "numba", "pygame"
+        "numpy", "numba", "pygame", "matplotlib"
     ],
     entry_points={
         # pokud by váš balíček poskytoval nástroje použitelné z terminálu, lze tímto přidat do cest

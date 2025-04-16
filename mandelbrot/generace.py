@@ -26,10 +26,10 @@ def mandelbrot(x_min:float, x_max:float, y_min:float, y_max:float, cells: int, m
     Vrací matici počtu iterací.
 
     :param x_min: nejmenší číslo na reálné ose 
-    :param x_max: největší číslo na reálné ose.
+    :param x_max: největší číslo na reálné ose
     :param y_min: nejmenší číslo na imaginární ose 
-    :param y_max: největší číslo na imaginární ose.
-    :param cells: na kolik políček se rozdělí každá osa.
+    :param y_max: největší číslo na imaginární ose
+    :param cells: na kolik políček se rozdělí každá osa
     :param max_iter: maximální počet iterací
     """
     #divergenční matice 
@@ -51,11 +51,11 @@ def julia_set(x_min:float, x_max:float, y_min:float, y_max:float, c: complex, ce
     Vrací matici počtu iterací.
 
     :param x_min: nejmenší číslo na reálné ose 
-    :param x_max: největší číslo na reálné ose.
+    :param x_max: největší číslo na reálné ose
     :param y_min: nejmenší číslo na imaginární ose 
-    :param y_max: největší číslo na imaginární ose.
+    :param y_max: největší číslo na imaginární ose
     :param c: číslo, které se přičítá každou iteraci
-    :param cells: na kolik políček se rozdělí každá osa.
+    :param cells: na kolik políček se rozdělí každá osa
     :param max_iter: maximální počet iterací
     """
     #divergenční matice 
