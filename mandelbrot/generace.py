@@ -1,8 +1,10 @@
 import numba 
 import numpy as np
+from typing import Any
+from numpy.typing import NDArray
 
 @numba.vectorize([numba.int64(numba.complex128, numba.complex128, numba.int32)])
-def count_iters(state: complex, c: complex, max_iter: int) -> int:
+def count_iters(state: complex | NDArray[np.complex128], c: complex | NDArray[np.complex128], max_iter: int) -> int | NDArray[np.int32]:
     """
     Spočítá počet operací než hodnota vyběhne ven. 
 
@@ -20,7 +22,7 @@ def count_iters(state: complex, c: complex, max_iter: int) -> int:
 
 #@numba.jit(signature="int64[:,:](float64,float64,float64,float64,int64,int64)",
 #           nopython=True, locals={"divergence", numba.np_ar})
-def mandelbrot(x_min:float, x_max:float, y_min:float, y_max:float, cells: int, max_iter: int) -> np.array:
+def mandelbrot(x_min:float, x_max:float, y_min:float, y_max:float, cells: int, max_iter: int) -> NDArray[np.int32]:
     """
     Vygeneruj Mandelbrotovu množinu.
     Vrací matici počtu iterací.
@@ -37,15 +39,15 @@ def mandelbrot(x_min:float, x_max:float, y_min:float, y_max:float, cells: int, m
     #matice stavu 
     #state = np.zeros((cells,cells), dtype=np.complex128)
     #matice C komplexních čísel   
-    x = np.linspace(x_min, x_max, cells, dtype=np.complex128).reshape((1,cells))
-    y = np.linspace(y_min, y_max, cells, dtype=np.complex128).reshape((cells,1)) * 1j
-    c_matrix = x + y,
+    x: NDArray[np.complex128] = np.linspace(x_min, x_max, cells, dtype=np.complex128).reshape((1,cells))
+    y: NDArray[np.complex128] = np.linspace(y_min, y_max, cells, dtype=np.complex128).reshape((cells,1)) * 1j
+    c_matrix = x + y
     #spočti iterace 
-    divergence = count_iters(0, c_matrix, max_iter)
+    divergence: Any = count_iters(0, c_matrix, max_iter)
     #vrať počet operací
     return divergence
 
-def julia_set(x_min:float, x_max:float, y_min:float, y_max:float, c: complex, cells: int, max_iter: int) -> np.array:
+def julia_set(x_min:float, x_max:float, y_min:float, y_max:float, c: complex, cells: int, max_iter: int) -> NDArray[np.int32]:
     """
     Vygeneruj Juliovu množinu.
     Vrací matici počtu iterací.
@@ -66,6 +68,6 @@ def julia_set(x_min:float, x_max:float, y_min:float, y_max:float, c: complex, ce
     #matice stavu 
     state = x+y
     #udělej iterace 
-    divergence = count_iters(state, c, max_iter)
+    divergence: Any = count_iters(state, c, max_iter)
     #vrať počet operací
     return divergence
