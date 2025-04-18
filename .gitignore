@@ -1,5 +1,5 @@
 mandelbrot/__pycache__
-mandelbrot.egg-info
-build
-.venv
+mandelbrot.egg-info/
+build/
+.venv/
 examples/.ipynb_checkpoints
