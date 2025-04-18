@@ -7,6 +7,6 @@ Vizualizace se provádí v PyGame.
 
 from .generace import mandelbrot, julia_set
 from .vizualizace import visual
+from .aplikace import init_app
 
-__all__ = ["mandelbrot", "julia_set", "visual"]
-
+__all__ = ["mandelbrot", "julia_set", "visual", "init_app"]
