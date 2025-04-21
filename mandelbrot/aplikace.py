@@ -15,12 +15,13 @@ def init_app():
 
     # parametry pohledu
     center: complex = 0.0 + 0.0j
-    real_side_length: complex = 3.0 + 3.0j
+    side_length: complex = 3.0 + 3.0j
     iterations: int = 100
     cells: Tuple[int, int] = (1280, 720)
     c_value: None = None
 
-    cache: Cache = Cache(center, real_side_length, iterations, cells, c_value)
+    cache: Cache = Cache()
+    cache.update(center, side_length, iterations, cells, c_value)
 
     # hlavní smyčka
     while running:
@@ -33,7 +34,7 @@ def init_app():
         screen.fill("midnightblue")
 
         # vykreslení
-        cache.render()
+        cache.render(screen, center, side_length)
 
         # ukonči snímek
         pg.display.flip()

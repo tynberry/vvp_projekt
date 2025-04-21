@@ -49,7 +49,7 @@ def convert_set_to_color(
     total = float(np.sum(histogram))
     # spočti pozici na paletě
     # argument nechybí, protože numba přeměňuje funkci
-    hues = count_hue(set, histogram, total)
+    hues = count_hue(set.astype(np.int32), histogram.astype(np.int32), total)
     # vrať color mapu
     return matplotlib.colormaps[color_map](hues)
 

@@ -1,8 +1,12 @@
 import pygame as pg
 import numpy as np
 from typing import Tuple
+from numpy.typing import NDArray
 
 from pygame import Surface
+
+from mandelbrot.generace import julia_set, mandelbrot
+from mandelbrot.vizualizace import convert_set_to_color
 
 
 def relative_close(a: complex, b: complex, epsilon: float):
@@ -10,7 +14,7 @@ def relative_close(a: complex, b: complex, epsilon: float):
     Vrátí True pokud jsou komplexní čísla `a` a `b` relativně dále než `epsilon`.
     """
     delta: complex = b - a
-    return abs(delta) / abs(a) >= epsilon
+    return abs(delta) >= epsilon * abs(a)
 
 
 class Cache:
@@ -19,60 +23,57 @@ class Cache:
     """
 
     center: complex
-    real_side_length: complex
+    side_length: complex
     iterations: int
     cells: Tuple[int, int]
     c_value: None | complex
     surface: None | pg.Surface
+    color_map: str
 
-    def __init__(
-        self,
-        center: complex,
-        real_side_length: complex,
-        iterations: int,
-        cells: Tuple[int, int],
-        c_value: None | complex,
-    ):
+    def __init__(self):
         """
         Vytvoří prázdnou cachi.
 
         :param center: střed pohledu
-        :param real_side_length: délka strany pohledu
+        :param side_length: délka strany pohledu
         :param iterations: počet iterací při generování
         :param cells: rozdělení pohledu na buňky
         :param c_value: Hodnota C v rovnici, Při none se vygeneruje Mandelbrotova množina, jinak Juliova
         """
-        self.center = center
-        self.real_side_length = real_side_length
-        self.iterations = iterations
-        self.cells = cells
-        self.c_value = c_value
+        self.center = 0 + 0j
+        self.side_length = 0 + 0j
+        self.iterations = 0
+        self.cells = (0, 0)
+        self.c_value = None
         self.surface = None
+        self.color_map = "viridis"
         pass
 
     def should_update(
         self,
         center: complex,
-        real_side_length: complex,
+        side_length: complex,
         iterations: int,
         cells: Tuple[int, int],
         c_value: None | complex,
+        color_map: str = "viridis",
     ):
         """
         Určí zda jsou parametry dostačující na aktualizaci.
 
         :param center: střed pohledu
-        :param real_side_length: délka strany pohledu
+        :param side_length: délka strany pohledu
         :param iterations: počet iterací při generování
         :param cells: rozdělení pohledu na buňky
         :param c_value: Hodnota C v rovnici, Při none se vygeneruje Mandelbrotova množina, jinak Juliova
+        :param color_map: barevná mapa
         """
         # nezměnil se moc střed?
         epsilon = 1e-3
         if not relative_close(self.center, center, epsilon):
             return True
         # nezměnil se moc zoom?
-        if not relative_close(self.real_side_length, real_side_length, epsilon):
+        if not relative_close(self.side_length, side_length, epsilon):
             return True
         # nezměnily se iterace?
         if self.iterations != iterations:
@@ -89,16 +90,20 @@ class Cache:
         if self.c_value is not None and c_value is not None:
             if relative_close(self.c_value, c_value, epsilon):
                 return True
+        # nezměnila se barevná mapa?
+        if self.color_map != color_map:
+            return True
         # žádná změna nalezena
         return False
 
     def update(
         self,
         center: complex,
-        real_side_length: complex,
+        side_length: complex,
         iterations: int,
         cells: Tuple[int, int],
         c_value: None | complex,
+        color_map: str = "viridis",
         force: bool = False,
     ):
         """
@@ -107,23 +112,65 @@ class Cache:
         Provede aktualizaci pouze pokud se parametry příliš mění od uložených.
 
         :param center: střed pohledu
-        :param real_side_length: délka strany pohledu
+        :param side_length: délka strany pohledu
         :param iterations: počet iterací při generování
         :param cells: rozdělení pohledu na buňky
         :param c_value: Hodnota C v rovnici, Při none se vygeneruje Mandelbrotova množina, jinak Juliova
-        :param force: donuť aktualizace
+        :param color_map: barevná mapa
+        :param force: donuť aktualizaci
         """
         # je aktualizace potřeba?
         if not force and not self.should_update(
-            center, real_side_length, iterations, cells, c_value
+            center, side_length, iterations, cells, c_value
         ):
             return
         # aktualizuj se
+        set: NDArray[np.int32]
+        if c_value is not None:
+            set = julia_set(center, side_length, c_value, cells, iterations)
+        else:
+            set = mandelbrot(center, side_length, cells, iterations)
+        # převeď na barvu
+        hues: NDArray[np.float32] = convert_set_to_color(set, color_map)
+        hues = 255 * hues
+        hues = np.swapaxes(hues, 0, 1)
 
-        pass
+        if self.surface is not None and self.cells == cells:
+            # nahraj do povrchu
+            pg.pixelcopy.array_to_surface(self.surface, hues.astype(np.uint8)[:, :, :3])
+        else:
+            # vytvoř nový povrch
+            self.surface = pg.surfarray.make_surface(hues.astype(np.uint8)[:, :, :3])
 
-    def render(self):
+        # ulož parametry posledního generování
+        self.center = center
+        self.side_length = side_length
+        self.iterations = iterations
+        self.cells = cells
+        self.c_value = c_value
+        self.color_map = color_map
+
+    def render(self, surface: Surface, center: complex, side_length: complex):
+        """
+        Vykreslí obsah cache relativně vůči aktivnímu středu a zoomu.
+
+        :param surface: Povrch na který se má cache vykreslit.
+        :param center: aktivní střed
+        :param side_length: délka strany aktivního pohledu
+        """
         # máme co na vykreslení?
         if not isinstance(self.surface, Surface):
             return
-        pass
+
+        # vypočti velikost pixelů v komplexní rovině
+        pixel_width = side_length.real / surface.get_width()
+        pixel_height = side_length.imag / surface.get_height()
+        # vypočti pozici vykreslení cache
+
+        pos_real = (self.center.real - center.real) / pixel_width
+        pos_imag = (self.center.imag - center.imag) / pixel_height
+        width = (self.side_length.real / side_length.real) / pixel_width
+        height = (self.side_length.imag / side_length.imag) / pixel_height
+
+        # vykresli povrch
+        surface.blit(self.surface, pg.Rect(pos_real, pos_imag, width, height))
