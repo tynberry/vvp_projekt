@@ -71,7 +71,7 @@ class Cache:
         :param color_map: barevná mapa
         """
         # nezměnil se moc střed?
-        epsilon = 1e-3
+        epsilon = 1e-1
         if not relative_close(self.center, center, epsilon):
             return True
         # nezměnil se moc zoom?
