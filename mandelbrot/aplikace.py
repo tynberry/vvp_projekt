@@ -1,16 +1,26 @@
 import pygame as pg
-import numpy as np
+from typing import Tuple
 
-from .generace import mandelbrot, julia_set
-from .vizualizace import convert_set_to_color
+from pygame.time import Clock
+
+from .cache import Cache
 
 
 def init_app():
     # incializace PyGame
     pg.init()
-    screen = pg.display.set_mode((1280, 720))
-    clock = pg.time.Clock()
-    running = True
+    screen: pg.Surface = pg.display.set_mode((1280, 720))
+    clock: Clock = pg.time.Clock()
+    running: bool = True
+
+    # parametry pohledu
+    center: complex = 0.0 + 0.0j
+    real_side_length: complex = 3.0 + 3.0j
+    iterations: int = 100
+    cells: Tuple[int, int] = (1280, 720)
+    c_value: None = None
+
+    cache: Cache = Cache(center, real_side_length, iterations, cells, c_value)
 
     # hlavní smyčka
     while running:
@@ -23,6 +33,7 @@ def init_app():
         screen.fill("midnightblue")
 
         # vykreslení
+        cache.render()
 
         # ukonči snímek
         pg.display.flip()
