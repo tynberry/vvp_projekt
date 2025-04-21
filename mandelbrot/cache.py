@@ -28,6 +28,7 @@ class Cache:
     cells: Tuple[int, int]
     c_value: None | complex
     surface: None | pg.Surface
+    scale_surface: None | pg.Surface
     color_map: str
 
     def __init__(self):
@@ -46,6 +47,7 @@ class Cache:
         self.cells = (0, 0)
         self.c_value = None
         self.surface = None
+        self.scale_surface = None
         self.color_map = "viridis"
         pass
 
@@ -81,7 +83,7 @@ class Cache:
         # nezměnily se buňky?
         if self.cells != cells:
             return True
-        # nezměnily se typ množiny?
+        # nezměnil se typ množiny?
         if self.c_value is None and c_value is not None:
             return True
         if self.c_value is not None and c_value is None:
@@ -166,11 +168,30 @@ class Cache:
         pixel_width = side_length.real / surface.get_width()
         pixel_height = side_length.imag / surface.get_height()
         # vypočti pozici vykreslení cache
-
-        pos_real = (self.center.real - center.real) / pixel_width
-        pos_imag = (self.center.imag - center.imag) / pixel_height
-        width = (self.side_length.real / side_length.real) / pixel_width
-        height = (self.side_length.imag / side_length.imag) / pixel_height
+        pixel_center_real = surface.get_width() / 2
+        pixel_center_imag = surface.get_height() / 2
+        off_real = (self.center.real - center.real) / pixel_width
+        off_imag = (self.center.imag - center.imag) / pixel_height
+        width = (self.side_length.real / side_length.real) * self.surface.get_width()
+        height = (self.side_length.imag / side_length.imag) * self.surface.get_height()
 
         # vykresli povrch
-        surface.blit(self.surface, pg.Rect(pos_real, pos_imag, width, height))
+        if self.scale_surface is None or self.scale_surface.get_size() != (
+            width,
+            height,
+        ):
+            self.scale_surface = pg.transform.scale(self.surface, (width, height))
+        else:
+            pg.transform.scale(
+                self.surface, (width, height), dest_surface=self.scale_surface
+            )
+
+        surface.blit(
+            self.scale_surface,
+            pg.Rect(
+                pixel_center_real - width / 2 + off_real,
+                pixel_center_imag - height / 2 + off_imag,
+                width,
+                height,
+            ),
+        )
