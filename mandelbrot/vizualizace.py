@@ -48,6 +48,7 @@ def convert_set_to_color(
     # spočti celkový počet pixelů
     total = float(np.sum(histogram))
     # spočti pozici na paletě
+    # argument nechybí, protože numba přeměňuje funkci
     hues = count_hue(set, histogram, total)
     # vrať color mapu
     return matplotlib.colormaps[color_map](hues)
