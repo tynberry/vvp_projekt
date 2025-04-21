@@ -1,18 +1,17 @@
 import matplotlib
+import matplotlib.pyplot as plt
+import numba
 import numpy as np
 from numpy.typing import NDArray
 
-import numba
-import matplotlib.pyplot as plt
-
 
 @numba.guvectorize(
-    [numba.void(numba.int64[:, :], numba.int64[:], numba.float64, numba.float32[:, :])],
+    [numba.void(numba.int32[:, :], numba.int32[:], numba.float64, numba.float32[:, :])],
     "(n,m),(p),()->(n,m)",
 )
 def count_hue(
-    iter: NDArray[np.int64],
-    hist: NDArray[np.int64],
+    iter: NDArray[np.int32],
+    hist: NDArray[np.int32],
     total: float,
     hues: NDArray[np.float32],
 ):
