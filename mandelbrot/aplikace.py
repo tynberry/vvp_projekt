@@ -134,6 +134,7 @@ def init_app():
         colormap_text = default_font.render(
             f"Color map: {color_map(color_ind)}", False, "black"
         )
+        fps_text = default_font.render(f"FPS: {clock.get_fps():.2}", False, "black")
         if auto_refresh:
             auto_refresh_text = default_font.render("Autorefresh ON", False, "black")
         else:
@@ -146,6 +147,7 @@ def init_app():
         screen.blit(c_text, (0, 128))
         screen.blit(colormap_text, (0, 160))
         screen.blit(auto_refresh_text, (0, 192))
+        screen.blit(fps_text, (0, 224))
 
         # ukonči snímek
         pg.display.flip()
