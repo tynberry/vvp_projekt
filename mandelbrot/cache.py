@@ -51,53 +51,6 @@ class Cache:
         self.color_map = "viridis"
         pass
 
-    def should_update(
-        self,
-        center: complex,
-        side_length: complex,
-        iterations: int,
-        cells: Tuple[int, int],
-        c_value: None | complex,
-        color_map: str = "viridis",
-    ):
-        """
-        Určí zda jsou parametry dostačující na aktualizaci.
-
-        :param center: střed pohledu
-        :param side_length: délka strany pohledu
-        :param iterations: počet iterací při generování
-        :param cells: rozdělení pohledu na buňky
-        :param c_value: Hodnota C v rovnici, Při none se vygeneruje Mandelbrotova množina, jinak Juliova
-        :param color_map: barevná mapa
-        """
-        # nezměnil se moc střed?
-        epsilon = 1e-1
-        if not relative_close(self.center, center, epsilon):
-            return True
-        # nezměnil se moc zoom?
-        if not relative_close(self.side_length, side_length, epsilon):
-            return True
-        # nezměnily se iterace?
-        if self.iterations != iterations:
-            return True
-        # nezměnily se buňky?
-        if self.cells != cells:
-            return True
-        # nezměnil se typ množiny?
-        if self.c_value is None and c_value is not None:
-            return True
-        if self.c_value is not None and c_value is None:
-            return True
-        # nezměnilo se moc C číslo?
-        if self.c_value is not None and c_value is not None:
-            if relative_close(self.c_value, c_value, epsilon):
-                return True
-        # nezměnila se barevná mapa?
-        if self.color_map != color_map:
-            return True
-        # žádná změna nalezena
-        return False
-
     def update(
         self,
         center: complex,
@@ -106,7 +59,6 @@ class Cache:
         cells: Tuple[int, int],
         c_value: None | complex,
         color_map: str = "viridis",
-        force: bool = False,
     ):
         """
         Aktualizuje cachi.
@@ -119,13 +71,7 @@ class Cache:
         :param cells: rozdělení pohledu na buňky
         :param c_value: Hodnota C v rovnici, Při none se vygeneruje Mandelbrotova množina, jinak Juliova
         :param color_map: barevná mapa
-        :param force: donuť aktualizaci
         """
-        # je aktualizace potřeba?
-        if not force and not self.should_update(
-            center, side_length, iterations, cells, c_value
-        ):
-            return
         # aktualizuj se
         set: NDArray[np.int32]
         if c_value is not None:

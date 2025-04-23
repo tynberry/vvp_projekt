@@ -57,7 +57,8 @@ def init_app():
         color_map(color_ind),
     )
 
-    auto_refresh = True
+    auto_refresh: bool = True
+    should_refresh: bool = False
 
     # hlavní smyčka
     while running:
@@ -67,8 +68,10 @@ def init_app():
                 running = False
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_q:
+                    should_refresh = True
                     zoom -= 1
                 elif event.key == pg.K_e:
+                    should_refresh = True
                     zoom += 1
                 elif event.key == pg.K_r:
                     cache.update(
@@ -78,15 +81,17 @@ def init_app():
                         cells,
                         c_value,
                         color_map(color_ind),
-                        force=True,
                     )
                 elif event.key == pg.K_o:
+                    should_refresh = True
                     center: complex = -0.5 + 0.0j
                     zoom: int = 0
                 elif event.key == pg.K_d:
+                    should_refresh = True
                     color_ind += 1
                     color_ind %= len(COLOR_MAPS)
                 elif event.key == pg.K_a:
+                    should_refresh = True
                     color_ind -= 1
                     if color_ind < 0:
                         color_ind += len(COLOR_MAPS)
@@ -98,15 +103,19 @@ def init_app():
         zoom_fl = ZOOM_FACTOR**zoom
         if pg.key.get_pressed()[pg.K_LEFT]:
             center -= MOVE_SPEED * zoom_fl * dt
+            should_refresh = True
         if pg.key.get_pressed()[pg.K_RIGHT]:
             center += MOVE_SPEED * zoom_fl * dt
+            should_refresh = True
         if pg.key.get_pressed()[pg.K_UP]:
             center -= MOVE_SPEED * zoom_fl * dt * 1j
+            should_refresh = True
         if pg.key.get_pressed()[pg.K_DOWN]:
             center += MOVE_SPEED * zoom_fl * dt * 1j
+            should_refresh = True
 
         # aktualizuj množinu
-        if auto_refresh:
+        if auto_refresh and should_refresh:
             cache.update(
                 center,
                 side_length_from_zoom(screen, zoom),
@@ -115,6 +124,7 @@ def init_app():
                 c_value,
                 color_map(color_ind),
             )
+            should_refresh = False
         # vyplň plochu
         screen.fill("midnightblue")
 
