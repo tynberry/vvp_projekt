@@ -3,3 +3,5 @@ mandelbrot.egg-info/
 build/
 .venv/
 examples/.ipynb_checkpoints
+profile.prof
+profile.json
