@@ -10,7 +10,10 @@ from numpy.typing import NDArray
 #    "(n,m),(p),()->(n,m)",
 # )
 @numba.njit(
-    "void(int32[:, :], int32[:], float64, float32[:, :])", nogil=True, parallel=True
+    "void(int32[:, :], int32[:], float64, float32[:, :])",
+    nogil=True,
+    parallel=True,
+    locals={"row": numba.int32, "col": numba.int32, "i": numba.int32},
 )
 def count_hue(
     iter: NDArray[np.int32],

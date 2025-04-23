@@ -9,6 +9,7 @@ from numpy.typing import NDArray
     "void(complex128[:,:], complex128[:,:], int64, int32[:,:])",
     nogil=True,
     parallel=True,
+    locals={"i": numba.int32, "row": numba.int32, "col": numba.int32},
 )
 def count_iters(
     state: NDArray[np.complex128],
