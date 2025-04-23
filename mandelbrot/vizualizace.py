@@ -5,9 +5,12 @@ import numpy as np
 from numpy.typing import NDArray
 
 
-@numba.guvectorize(
-    [numba.void(numba.int32[:, :], numba.int32[:], numba.float64, numba.float32[:, :])],
-    "(n,m),(p),()->(n,m)",
+# @numba.guvectorize(
+#    [numba.void(numba.int32[:, :], numba.int32[:], numba.float64, numba.float32[:, :])],
+#    "(n,m),(p),()->(n,m)",
+# )
+@numba.njit(
+    "void(int32[:, :], int32[:], float64, float32[:, :])", nogil=True, parallel=True
 )
 def count_hue(
     iter: NDArray[np.int32],
@@ -24,7 +27,7 @@ def count_hue(
     :param hues: výsledné pole barev
     """
 
-    for row in range(iter.shape[0]):
+    for row in numba.prange(iter.shape[0]):
         for col in range(iter.shape[1]):
             iters = iter[row, col]
             hues[row, col] = 0
@@ -48,8 +51,8 @@ def convert_set_to_color(
     # spočti celkový počet pixelů
     total = float(np.sum(histogram))
     # spočti pozici na paletě
-    # argument nechybí, protože numba přeměňuje funkci
-    hues = count_hue(set.astype(np.int32), histogram.astype(np.int32), total)
+    hues = np.zeros(set.shape, dtype=np.float32)
+    count_hue(set.astype(np.int32), histogram.astype(np.int32), total, hues)
     # vrať color mapu
     return matplotlib.colormaps[color_map](hues)
 
