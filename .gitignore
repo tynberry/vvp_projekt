@@ -8,3 +8,4 @@ examples/.ipynb_checkpoints
 *.c
 profile.prof
 profile.json
+examples/examples.md
