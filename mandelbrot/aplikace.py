@@ -124,8 +124,12 @@ def init_app():
             extents: complex = side_length_from_zoom(screen, zoom)
             dx = dx * extents.real
             dy = dy * extents.imag
-
-            center = (center.real - dx) + (center.imag - dy) * 1j
+            # změna položky
+            if pg.key.get_mods() & pg.KMOD_LSHIFT:
+                if c_value is not None:
+                    c_value -= dx + dy * 1j
+            else:
+                center -= dx + dy * 1j
 
         # aktualizuj množinu
         if auto_refresh and should_refresh:
