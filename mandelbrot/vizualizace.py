@@ -52,7 +52,7 @@ def convert_set_to_color(
     histogram, _ = np.histogram(set, bins=max_iter)
     hist_cumsum = np.cumsum(histogram)
     # spočti celkový počet pixelů
-    total = float(np.sum(histogram))
+    total = float(hist_cumsum[-1])
     # spočti pozici na paletě
     hues = np.zeros(set.shape, dtype=np.float32)
     count_hue(set.astype(np.int32), hist_cumsum.astype(np.int32), total, hues)
