@@ -57,8 +57,10 @@ def init_app():
         color_map(color_ind),
     )
 
+    # flagy aplikace
     auto_refresh: bool = True
     should_refresh: bool = False
+    dragging: bool = False
 
     # hlavní smyčka
     while running:
@@ -98,21 +100,26 @@ def init_app():
                 elif event.key == pg.K_t:
                     auto_refresh = not auto_refresh
 
-        # pohyb pohledem
-        dt = clock.get_time() / 1000
-        zoom_fl = ZOOM_FACTOR**zoom
-        if pg.key.get_pressed()[pg.K_LEFT]:
-            center -= MOVE_SPEED * zoom_fl * dt
+        # pohyb pohledem pomocí myši
+        if pg.mouse.get_pressed()[0] and not dragging:
+            dragging = True
+            # očisti deltu myši
+            _ = pg.mouse.get_rel()
+        if not pg.mouse.get_pressed()[0] and dragging:
+            dragging = False
             should_refresh = True
-        if pg.key.get_pressed()[pg.K_RIGHT]:
-            center += MOVE_SPEED * zoom_fl * dt
-            should_refresh = True
-        if pg.key.get_pressed()[pg.K_UP]:
-            center -= MOVE_SPEED * zoom_fl * dt * 1j
-            should_refresh = True
-        if pg.key.get_pressed()[pg.K_DOWN]:
-            center += MOVE_SPEED * zoom_fl * dt * 1j
-            should_refresh = True
+        if dragging:
+            # pohyb myši v pixelech
+            delta: Tuple[int, int] = pg.mouse.get_rel()
+            # pohyb myši vůči celé obrazovce
+            dx: float = delta[0] / screen.get_width()
+            dy: float = delta[1] / screen.get_height()
+            # škálování pohybu podle zoomu
+            extents: complex = side_length_from_zoom(screen, zoom)
+            dx = dx * extents.real
+            dy = dy * extents.imag
+
+            center = (center.real - dx) + (center.imag - dy) * 1j
 
         # aktualizuj množinu
         if auto_refresh and should_refresh:
