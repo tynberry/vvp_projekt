@@ -68,14 +68,12 @@ def init_app():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
+            elif event.type == pg.MOUSEWHEEL:
+                if event.y != 0:
+                    zoom -= max(min(event.y, 1), -1)
+                    should_refresh = True
             elif event.type == pg.KEYDOWN:
-                if event.key == pg.K_q:
-                    should_refresh = True
-                    zoom -= 1
-                elif event.key == pg.K_e:
-                    should_refresh = True
-                    zoom += 1
-                elif event.key == pg.K_r:
+                if event.key == pg.K_r:
                     cache.update(
                         center,
                         side_length_from_zoom(screen, zoom),
