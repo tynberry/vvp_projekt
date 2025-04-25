@@ -105,6 +105,14 @@ def init_app():
                         cached_c_value = c_value
                         c_value = None
                     should_refresh = True
+                elif event.key == pg.K_g:
+                    iterations += 25
+                    should_refresh = True
+                elif event.key == pg.K_h:
+                    iterations -= 25
+                    if iterations < 25:
+                        iterations = 25
+                    should_refresh = True
 
         # pohyb pohledem pomocí myši
         if pg.mouse.get_pressed()[0] and not dragging:
