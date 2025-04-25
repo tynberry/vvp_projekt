@@ -49,7 +49,7 @@ def convert_set_to_color(
     """
     # vytvoř histrogram iterací
     max_iter = np.max(set)
-    histogram, _ = np.histogram(set, bins=max_iter)
+    histogram, _ = np.histogram(set, bins=max_iter + 1)
     hist_cumsum = np.cumsum(histogram)
     # spočti celkový počet pixelů
     total = float(hist_cumsum[-1])
