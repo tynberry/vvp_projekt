@@ -34,9 +34,8 @@ def count_hue(
         for col in range(iter.shape[1]):
             iters = iter[row, col]
             hues[row, col] = 0
-            for i in range(iters):
-                # přidej barvu do pole
-                hues[row, col] += hist[i] / total
+            # přidej barvu do pole
+            hues[row, col] += hist[iters] / total
 
 
 def convert_set_to_color(
@@ -51,11 +50,12 @@ def convert_set_to_color(
     # vytvoř histrogram iterací
     max_iter = np.max(set)
     histogram, _ = np.histogram(set, bins=max_iter)
+    hist_cumsum = np.cumsum(histogram)
     # spočti celkový počet pixelů
     total = float(np.sum(histogram))
     # spočti pozici na paletě
     hues = np.zeros(set.shape, dtype=np.float32)
-    count_hue(set.astype(np.int32), histogram.astype(np.int32), total, hues)
+    count_hue(set.astype(np.int32), hist_cumsum.astype(np.int32), total, hues)
     # vrať color mapu
     return matplotlib.colormaps[color_map](hues)
 
