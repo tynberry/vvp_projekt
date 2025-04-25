@@ -44,7 +44,8 @@ def init_app():
     zoom: int = 0
     iterations: int = 100
     cells: Tuple[int, int] = (1280, 720)
-    c_value: None = None
+    cached_c_value: complex = -0.8 + 0.156j
+    c_value: complex | None = None
     color_ind: int = 0
 
     cache: Cache = Cache()
@@ -97,6 +98,13 @@ def init_app():
                         color_ind += len(COLOR_MAPS)
                 elif event.key == pg.K_t:
                     auto_refresh = not auto_refresh
+                elif event.key == pg.K_j:
+                    if c_value is None:
+                        c_value = cached_c_value
+                    else:
+                        cached_c_value = c_value
+                        c_value = None
+                    should_refresh = True
 
         # pohyb pohledem pomocí myši
         if pg.mouse.get_pressed()[0] and not dragging:
