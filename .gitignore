@@ -6,6 +6,6 @@ examples/.ipynb_checkpoints
 *.so
 *.dll
 *.c
-profile.prof
+*.prof
 profile.json
 examples/examples.md
