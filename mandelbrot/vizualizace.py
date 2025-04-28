@@ -10,10 +10,10 @@ from numpy.typing import NDArray
 #    "(n,m),(p),()->(n,m)",
 # )
 @numba.njit(
-    "void(int32[:, :], int32[:], float64, float32[:, :])",
+    "void(int32[:, :], int64[:], float64, float32[:, :])",
     nogil=True,
     parallel=True,
-    locals={"row": numba.int32, "col": numba.int32, "i": numba.int32},
+    locals={"row": numba.int32, "col": numba.int32},
 )
 def count_hue(
     iter: NDArray[np.int32],
@@ -32,10 +32,8 @@ def count_hue(
 
     for row in numba.prange(iter.shape[0]):
         for col in range(iter.shape[1]):
-            iters = iter[row, col]
-            hues[row, col] = 0
             # přidej barvu do pole
-            hues[row, col] += hist[iters] / total
+            hues[row, col] = hist[iter[row, col]] / total
 
 
 def convert_set_to_color(
@@ -55,7 +53,7 @@ def convert_set_to_color(
     # spočti celkový počet pixelů
     total = float(histogram[-1])
     # spočti pozici na paletě
-    count_hue(set.astype(np.int32), histogram.astype(np.int32), total, hues)
+    count_hue(set, histogram, total, hues)
     # vrať color mapu
     return matplotlib.colormaps[color_map](hues)
 

@@ -4,7 +4,18 @@ from typing import Tuple
 from numpy.typing import NDArray
 
 
-@numba.njit("int32(complex128, complex128, int32)", nogil=True)
+@numba.njit(
+    "int32(complex128, complex128, int32)",
+    nogil=True,
+    locals={
+        "i": numba.int32,
+        "z_real": numba.float64,
+        "z_imag": numba.float64,
+        "c_real": numba.float64,
+        "c_imag": numba.float64,
+        "temp_real": numba.float64,
+    },
+)
 def count_iters(state: complex, c: complex, max_iter: int) -> int:
     """
     Spočítá počet operací než hodnota vyběhne ven.
@@ -13,11 +24,16 @@ def count_iters(state: complex, c: complex, max_iter: int) -> int:
     :param c: číslo přičítané každou iteraci
     :param max_iter: maximální počet iterací
     """
+    z_real = state.real
+    z_imag = state.imag
+    c_real = c.real
+    c_imag = c.imag
+
     for i in range(max_iter):
-        temp_real = state.real * state.real - state.imag * state.imag + c.real
-        state = ((state.real + state.real) * state.imag + c.imag) * 1j
-        state += temp_real
-        if state.real * state.real + state.imag * state.imag > 4:
+        temp_real = z_real * z_real - z_imag * z_imag + c_real
+        z_imag = (z_real + z_real) * z_imag + c_imag
+        z_real = temp_real
+        if z_real * z_real + z_imag * z_imag > 4.0:
             return i + 1
     return max_iter
 
@@ -33,6 +49,12 @@ def count_iters(state: complex, c: complex, max_iter: int) -> int:
     nopython=True,
     nogil=True,
     parallel=True,
+    locals={
+        "real_ind": numba.int32,
+        "imag_ind": numba.int32,
+        "c_real": numba.float64,
+        "c_imag": numba.float64,
+    },
 )
 def mandelbrot(
     center: complex,
