@@ -27,6 +27,8 @@ class Cache:
     iterations: int
     cells: Tuple[int, int]
     c_value: None | complex
+    set: None | NDArray[np.int32]
+    hues: None | NDArray[np.float32]
     surface: None | pg.Surface
     scale_surface: None | pg.Surface
     color_map: str
@@ -47,6 +49,8 @@ class Cache:
         self.cells = (0, 0)
         self.c_value = None
         self.surface = None
+        self.hues = None
+        self.set = None
         self.scale_surface = None
         self.color_map = "viridis"
         pass
@@ -72,14 +76,23 @@ class Cache:
         :param c_value: Hodnota C v rovnici, Při none se vygeneruje Mandelbrotova množina, jinak Juliova
         :param color_map: barevná mapa
         """
+        # vytvoř množiny
+        if self.set is None:
+            self.set = np.zeros(cells, dtype=np.int32)
+        if self.hues is None:
+            self.hues = np.zeros(cells, dtype=np.float32)
+        # kontrola velikosti množiny
+        if self.set.shape != cells:
+            self.set = np.zeros(cells, dtype=np.int32)
+        if self.hues.shape != cells:
+            self.hues = np.zeros(cells, dtype=np.float32)
         # aktualizuj se
-        set: NDArray[np.int32]
         if c_value is not None:
-            set = julia_set(center, side_length, c_value, cells, iterations)
+            julia_set(center, side_length, c_value, cells, iterations, self.set)
         else:
-            set = mandelbrot(center, side_length, cells, iterations)
+            mandelbrot(center, side_length, cells, iterations, self.set)
         # převeď na barvu
-        hues: NDArray[np.float32] = convert_set_to_color(set, color_map)
+        hues: NDArray[np.float32] = convert_set_to_color(self.set, self.hues, color_map)
         hues = 255 * hues
         hues = np.swapaxes(hues, 0, 1)
 
