@@ -94,7 +94,6 @@ class Cache:
         # převeď na barvu
         hues: NDArray[np.float32] = convert_set_to_color(self.set, self.hues, color_map)
         hues = 255 * hues
-        hues = np.swapaxes(hues, 0, 1)
 
         if self.surface is not None and self.cells == cells:
             # nahraj do povrchu
