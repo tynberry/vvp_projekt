@@ -13,6 +13,7 @@ from numpy.typing import NDArray
     "void(int32[:, :], int64[:], float64, float32[:, :])",
     nogil=True,
     parallel=True,
+    fastmath=True,
     locals={"row": numba.int32, "col": numba.int32},
 )
 def count_hue(

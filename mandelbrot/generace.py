@@ -7,6 +7,7 @@ from numpy.typing import NDArray
 @numba.njit(
     "int32(complex128, complex128, int32)",
     nogil=True,
+    fastmath=True,
     locals={
         "i": numba.int32,
         "z_real": numba.float64,
