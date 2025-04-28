@@ -88,9 +88,9 @@ class Cache:
             self.hues = np.zeros(cells, dtype=np.float32)
         # aktualizuj se
         if c_value is not None:
-            julia_set(center, side_length, c_value, cells, iterations, self.set)
+            julia_set(center, side_length, c_value, iterations, self.set)
         else:
-            mandelbrot(center, side_length, cells, iterations, self.set)
+            mandelbrot(center, side_length, iterations, self.set)
         # převeď na barvu
         hues: NDArray[np.float32] = convert_set_to_color(self.set, self.hues, color_map)
         hues = 255 * hues
