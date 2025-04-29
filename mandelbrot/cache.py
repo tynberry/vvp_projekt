@@ -92,7 +92,9 @@ class Cache:
         else:
             mandelbrot(center, side_length, iterations, self.set)
         # převeď na barvu
-        hues: NDArray[np.float32] = convert_set_to_color(self.set, self.hues, color_map)
+        hues: NDArray[np.float32] = convert_set_to_color(
+            self.set, self.hues, iterations, color_map
+        )
         hues = 255 * hues
 
         if self.surface is not None and self.cells == cells:

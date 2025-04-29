@@ -38,7 +38,10 @@ def count_hue(
 
 
 def convert_set_to_color(
-    set: NDArray[np.int32], hues: NDArray[np.float32], color_map: str = "plasma"
+    set: NDArray[np.int32],
+    hues: NDArray[np.float32],
+    max_iter: int,
+    color_map: str = "plasma",
 ) -> NDArray[np.float32]:
     """
     Vrátí pole barev obarvené množiny podle dané barevné mapy.
@@ -48,7 +51,6 @@ def convert_set_to_color(
     :param color_map: barevná mapa
     """
     # vytvoř histrogram iterací
-    max_iter = np.max(set)
     histogram, _ = np.histogram(set, bins=max_iter + 1)
     np.cumsum(histogram, out=histogram)
     # spočti celkový počet pixelů
@@ -61,6 +63,7 @@ def convert_set_to_color(
 
 def visual(
     set: NDArray[np.int32],
+    max_iter: int,
     center: complex = 0 + 0j,
     side_length: float = 1,
     color_map: str = "plasma",
@@ -75,7 +78,9 @@ def visual(
     :param max_iter: maximální počet iterací
     """
     # barevné pole
-    hues = convert_set_to_color(set, np.zeros(set.shape, dtype=np.float32), color_map)
+    hues = convert_set_to_color(
+        set, np.zeros(set.shape, dtype=np.float32), max_iter, color_map
+    )
     # vykresli množinu
     extent = side_length / 2
     plt.imshow(
