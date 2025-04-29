@@ -140,16 +140,16 @@ def init_app():
                 center -= dx + dy * 1j
 
         # aktualizuj množinu
-        # if auto_refresh and should_refresh:
-        cache.update(
-            center,
-            side_length_from_zoom(screen, zoom),
-            iterations,
-            cells,
-            c_value,
-            color_map(color_ind),
-        )
-        should_refresh = False
+        if auto_refresh and should_refresh:
+            cache.update(
+                center,
+                side_length_from_zoom(screen, zoom),
+                iterations,
+                cells,
+                c_value,
+                color_map(color_ind),
+            )
+            should_refresh = False
         # vyplň plochu
         screen.fill("midnightblue")
 
