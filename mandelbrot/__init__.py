@@ -5,7 +5,7 @@ Generace používá numpy a Numbu.
 Vizualizace se provádí v PyGame.
 """
 
-from .generace import mandelbrot, julia_set
+from .gen import mandelbrot, julia_set
 from .vizualizace import visual
 from .aplikace import init_app
 

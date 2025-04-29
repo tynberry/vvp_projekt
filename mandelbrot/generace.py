@@ -1,7 +1,6 @@
 import numba
 import numpy as np
 from numpy.typing import NDArray
-from .gen import count_iters
 
 
 @numba.njit(

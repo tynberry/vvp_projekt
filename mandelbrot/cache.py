@@ -5,7 +5,8 @@ from numpy.typing import NDArray
 
 from pygame import Surface
 
-from mandelbrot.generace import julia_set, mandelbrot
+# from mandelbrot.generace import julia_set, mandelbrot
+from mandelbrot.gen import mandelbrot, julia_set
 from mandelbrot.vizualizace import convert_set_to_color
 
 
