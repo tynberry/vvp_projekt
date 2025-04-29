@@ -169,7 +169,7 @@ def init_app():
         colormap_text = default_font.render(
             f"Color map: {color_map(color_ind)}", False, "black"
         )
-        fps_text = default_font.render(f"FPS: {clock.get_fps():.2}", False, "black")
+        fps_text = default_font.render(f"FPS: {clock.get_fps():.4}", False, "black")
         if auto_refresh:
             auto_refresh_text = default_font.render("Autorefresh ON", False, "black")
         else:
