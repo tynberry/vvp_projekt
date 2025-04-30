@@ -165,7 +165,7 @@ def init_app():
         iteration_text = default_font.render(
             f"Iterations: {iterations}", False, "black"
         )
-        c_text = default_font.render(f"C Value: {c_value}", False, "black")
+        c_text = default_font.render(f"C Value: {c_value:.3}", False, "black")
         colormap_text = default_font.render(
             f"Color map: {color_map(color_ind)}", False, "black"
         )
