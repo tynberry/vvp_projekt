@@ -24,7 +24,7 @@ def visual(
     :param side_length: délka strany pohledu
     :param color_map: barevná mapa
     """
-    # vypočti barevný LUP
+    # vypočti barevnou LUT
     lup = np.linspace(0, 1, num=max_iter + 1, dtype=np.uint8)
     lup = matplotlib.colormaps[color_map](lup, bytes=True)
     # barevné pole
