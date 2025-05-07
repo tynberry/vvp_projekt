@@ -25,11 +25,16 @@ def side_length_from_zoom(surface: pg.Surface, zoom: int) -> complex:
 def color_map(ind: int) -> str:
     """
     Vybere barevnou mapu z globálního seznamu map.
+
+    :param ind: index barevné mapy
     """
     return COLOR_MAPS[ind]
 
 
 def init_app():
+    """
+    Spustí aplikaci pro vizualizaci množin.
+    """
     # incializace PyGame
     pg.init()
     pg.font.init()
@@ -105,10 +110,10 @@ def init_app():
                         cached_c_value = c_value
                         c_value = None
                     should_refresh = True
-                elif event.key == pg.K_g:
+                elif event.key == pg.K_h:
                     iterations += 25
                     should_refresh = True
-                elif event.key == pg.K_h:
+                elif event.key == pg.K_g:
                     iterations -= 25
                     if iterations < 25:
                         iterations = 25

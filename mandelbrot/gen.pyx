@@ -16,6 +16,10 @@ cdef int count_iters(
     """
     Spočítá počet operací než hodnota vyběhne ven.
 
+    :param z_real: reálná část z0
+    :param z_imag: imaginární část z0
+    :param c_real: reálná část c
+    :param c_imag: imaginární část c
     :param max_iter: maximální počet iterací
     """
     cdef double temp_real
@@ -48,6 +52,7 @@ cpdef void mandelbrot(
     :param center: střed množiny
     :param side_length: délka stran množiny v každé ose
     :param max_iter: maximální počet iterací
+    :param divergence: výstupní matice počtu iterací
     """
     cdef double c_real 
     cdef double c_imag 
@@ -93,7 +98,9 @@ cpdef void julia_set(
 
     :param center: střed množiny
     :param side_length: délka stran množiny v každé ose
+    :param c: konstantní hodnota c
     :param max_iter: maximální počet iterací
+    :param divergence: výstupní matice počtu iterací
     """
     cdef double c_real = c.real
     cdef double c_imag = c.imag
