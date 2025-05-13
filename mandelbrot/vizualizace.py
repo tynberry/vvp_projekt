@@ -25,11 +25,11 @@ def visual(
     :param color_map: barevná mapa
     """
     # vypočti barevnou LUT
-    lup = np.linspace(0, 1, num=max_iter + 1, dtype=np.uint8)
-    lup = matplotlib.colormaps[color_map](lup, bytes=True)
+    lut = np.linspace(0, 1, num=max_iter + 1, dtype=np.float32)
+    lut = matplotlib.colormaps[color_map](lut, bytes=True)
     # barevné pole
     hues = np.zeros((set.shape[0], set.shape[1], 3), dtype=np.uint8)
-    convert_set_to_color(set, hues, max_iter, lup)
+    convert_set_to_color(set, hues, max_iter, lut)
     # vykresli množinu
     extent = side_length / 2
     plt.imshow(
