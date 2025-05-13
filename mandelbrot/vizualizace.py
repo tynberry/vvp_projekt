@@ -2,7 +2,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
-from mandelbrot.viz_c import convert_set_to_color
+from .viz_c import convert_set_to_color
 
 
 def visual(

@@ -7,8 +7,15 @@ from Cython.Build import cythonize
 
 extensions = [
     Extension(
-        "*",
-        ["mandelbrot/*.pyx"],
+        "mandelbrot.gen",
+        ["mandelbrot/gen.pyx"],
+        include_dirs=[numpy.get_include()],
+        extra_compile_args=["-O3", "-ffast-math", "-march=native", "-fopenmp"],
+        extra_link_args=["-fopenmp"],
+    ),
+    Extension(
+        "mandelbrot.viz_c",
+        ["mandelbrot/viz_c.pyx"],
         include_dirs=[numpy.get_include()],
         extra_compile_args=["-O3", "-ffast-math", "-march=native", "-fopenmp"],
         extra_link_args=["-fopenmp"],
@@ -27,7 +34,4 @@ setup(
         "matplotlib",
     ],
     ext_modules=cythonize(extensions),
-    entry_points={
-        # pokud by váš balíček poskytoval nástroje použitelné z terminálu, lze tímto přidat do cest
-    },
 )
