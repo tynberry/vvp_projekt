@@ -5,8 +5,9 @@ from pygame.time import Clock
 
 from .cache import Cache
 
-MOVE_SPEED = 0.3
+# Báze pro oddalování a přibližování
 ZOOM_FACTOR = 1.5
+# Seznam názvů několika barevných map z matplotlib
 COLOR_MAPS = ["viridis", "plasma", "inferno", "magma", "cividis", "jet", "turbo"]
 
 

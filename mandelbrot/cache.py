@@ -5,24 +5,10 @@ from numpy.typing import NDArray
 
 from pygame import Surface
 
-# from mandelbrot.generace import julia_set, mandelbrot
 from .gen import mandelbrot, julia_set
 from .vizualizace import convert_set_to_color
 
 import matplotlib
-
-
-def relative_close(a: complex, b: complex, epsilon: float):
-    """
-    Vrátí True pokud jsou komplexní čísla `a` a `b` relativně dále než `epsilon`.
-
-    :param a: první číslo
-    :param b: druhé číslo
-    :param epsilon: relativní přesnost
-    """
-    delta: complex = b - a
-    return abs(delta) >= epsilon * abs(a)
-
 
 class Cache:
     """
@@ -71,10 +57,10 @@ class Cache:
         Aktualizuje cachi.
 
         :param center: střed pohledu
-        :param side_length: délka strany pohledu
+        :param side_length: délka stran pohledu
         :param iterations: počet iterací při generování
         :param cells: rozdělení pohledu na buňky
-        :param c_value: Hodnota C v rovnici, Při none se vygeneruje Mandelbrotova množina, jinak Juliova
+        :param c_value: Hodnota C v rovnici, Při None se vygeneruje Mandelbrotova množina, jinak Juliova
         :param color_map: barevná mapa
         """
         # vytvoř barevnou LUT
@@ -120,11 +106,11 @@ class Cache:
 
     def render(self, surface: Surface, center: complex, side_length: complex):
         """
-        Vykreslí obsah cache relativně vůči aktivnímu středu a zoomu.
+        Vykreslí obsah cache relativně vůči aktivnímu středu a délce stran.
 
         :param surface: Povrch na který se má cache vykreslit.
         :param center: aktivní střed
-        :param side_length: délka strany aktivního pohledu
+        :param side_length: délka stran aktivního pohledu
         """
         # máme co na vykreslení?
         if not isinstance(self.surface, Surface):
