@@ -5,9 +5,9 @@ Zadání lze nalézt v souboru [ZADÁNÍ.md](ZADÁNÍ.md).
 ## Vlastnosti
 
 Knihovna projektu zprostředkovává funkce pro generování Mandelbrotovy a Juliovy množiny.
-Dále dovoluje převedení matici počtu iterací před divergencí
+Dále dovoluje převedení matice iterací před divergencí
 do barevné matice pomocí barevných map knihovny `matplotlib` a histogramu počtu iterací.
-Na konec v knihovně je vizualizační aplikace na bázi `pygame`, která dovoluje interaktivní
+Na konec knihovna nabízí vizualizační aplikaci na bázi `pygame`, která dovoluje interaktivní
 průchod množinami.
 
 Příklady použití knihovny jsou v Jupyter Notebooku `./examples/examples.ipynb`.
