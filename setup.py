@@ -2,9 +2,8 @@ import numpy
 from setuptools import setup, find_packages, Extension
 from Cython.Build import cythonize
 
-# Před samotným setupem lze opět vykonávat libovolný Python kód
-# Například kompilace Python balíčků pro rychlejší výpočty apod...
 
+# seznam Cython modulů
 extensions = [
     Extension(
         "mandelbrot.gen",
@@ -22,6 +21,7 @@ extensions = [
     ),
 ]
 
+# setup balíčku
 setup(
     name="mandelbrot",  # jméno balíku
     version="1.0.0",  # verze - pokud například distribujete balík uživatelům
