@@ -15,13 +15,16 @@ def visual(
     """
     Vizualizuje pole počtu iterací pomocí histogramového barvení.
 
-    Zdroj:
+    Zdroj algoritmu:
     https://en.wikipedia.org/wiki/Plotting_algorithms_for_the_Mandelbrot_set
 
     :param set: pole počtu iterací před divergencí
     :param max_iter: maximální počet iterací
+    :param center: střed pohledu
+    :param side_length: délka strany pohledu
+    :param color_map: barevná mapa
     """
-    # vypočti barevný LUP
+    # vypočti barevnou LUT
     lup = np.linspace(0, 1, num=max_iter + 1, dtype=np.uint8)
     lup = matplotlib.colormaps[color_map](lup, bytes=True)
     # barevné pole

@@ -15,6 +15,10 @@ import matplotlib
 def relative_close(a: complex, b: complex, epsilon: float):
     """
     Vrátí True pokud jsou komplexní čísla `a` a `b` relativně dále než `epsilon`.
+
+    :param a: první číslo
+    :param b: druhé číslo
+    :param epsilon: relativní přesnost
     """
     delta: complex = b - a
     return abs(delta) >= epsilon * abs(a)
@@ -40,12 +44,6 @@ class Cache:
     def __init__(self):
         """
         Vytvoří prázdnou cachi.
-
-        :param center: střed pohledu
-        :param side_length: délka strany pohledu
-        :param iterations: počet iterací při generování
-        :param cells: rozdělení pohledu na buňky
-        :param c_value: Hodnota C v rovnici, Při none se vygeneruje Mandelbrotova množina, jinak Juliova
         """
         self.center = 0 + 0j
         self.side_length = 0 + 0j
@@ -71,8 +69,6 @@ class Cache:
     ):
         """
         Aktualizuje cachi.
-
-        Provede aktualizaci pouze pokud se parametry příliš mění od uložených.
 
         :param center: střed pohledu
         :param side_length: délka strany pohledu
