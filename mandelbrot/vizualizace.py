@@ -33,7 +33,7 @@ def visual(
     # vykresli množinu
     extent = side_length / 2
     plt.imshow(
-        hues,
+        hues.T,
         extent=(
             center.real - extent.real,
             center.real + extent.real,
