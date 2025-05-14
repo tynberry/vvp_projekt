@@ -30,6 +30,12 @@ uv pip install .
 uv pip install mandelbrot
 ```
 
+Pro lokální sestavení lze použít příkaz:
+
+```bash
+python setup.py build_ext --inplace
+```
+
 ## Poznámky
 
 Projekt byl vytvořen pro předmět VVP na VŠB-TUO v letním semestru 2024/2025.
